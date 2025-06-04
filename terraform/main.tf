@@ -3,12 +3,12 @@ provider "aws" {
 }
 
 module "vpc" {
-  source              = "./modules/vpc"
-  project_name        = var.project_name
-  vpc_cidr            = var.vpc_cidr
-  public_subnet_cidr  = var.public_subnet_cidr
-  private_subnet_cidr = var.private_subnet_cidr
-  az                  = var.availability_zone
+  source               = "./modules/vpc"
+  project_name         = var.project_name
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  azs                  = var.azs
 }
 
 module "alb_sg" {
@@ -71,7 +71,7 @@ module "iam" {
 module "alb" {
   source           = "./modules/alb"
   project_name     = var.project_name
-  public_subnet_ids = [module.vpc.public_subnet_id]
+  public_subnet_ids = module.vpc.public_subnet_ids
   vpc_id           = module.vpc.vpc_id
   alb_sg_id        = module.alb_sg.security_group_id
 }
@@ -81,7 +81,7 @@ module "ecs" {
   project_name        = var.project_name
   image_url           = var.image_url
   execution_role_arn  = module.iam.execution_role_arn
-  private_subnet_ids  = [module.vpc.private_subnet_id]
+  private_subnet_ids = module.vpc.public_subnet_ids
   service_sg_id       = module.ecs_sg.security_group_id
   target_group_arn    = module.alb.target_group_arn
   alb_listener        = module.alb.listener_arn
