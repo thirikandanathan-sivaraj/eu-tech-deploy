@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
         </style>
       </head>
       <body>
-        <h1>Welcome! This is the first assessment for EU Tech Chamber. Test 2</h1>
+        <h1>Welcome! This is the first assessment for EU Tech Chamber. Test 3</h1>
         <img src="/team.jpg" alt="Team Photo" />
       </body>
     </html>
